@@ -2,6 +2,8 @@
 
 Docker container which runs SABnzbd while connected to OpenVPN.
 
+This is an arm64 build of [sabnzbdvpn container](https://github.com/Mumie-hub/docker-services) by Mumie-hub.
+
 ## Run container from Docker registry
 To run the container use this command for example:
 
@@ -12,7 +14,7 @@ docker run -d --name sabnzbdvpn \
             -v /etc/localtime:/etc/localtime:ro \
             -e "LOCAL_NETWORK=192.168.0.0/24" \
             -p 8080:8080 \
-            mumiehub/sabnzbdvpn
+            cheersmate/sabnzbdvpn
 ```
 
 
@@ -73,6 +75,12 @@ Add a new volume mount to your `docker run` command that mounts your config file
 
 If you have an separate ca.crt file your volume mount should be a folder containing both the ca.crt and the .ovpn config.
 
+If you are being asked to enter your username and password when OpenVPN is initialising (`auth-user-pass` option), add the following line to your .ovpn config file:
+```
+auth-user-pass /etc/openvpn/custom/pass.txt
+```
+Then create a bind mount to the file on your local machine. Eg. `-v /path/to/pass.txt:/etc/openvpn/custom/pass.txt`.
+
 #### Use Google DNS servers
 Some have encountered problems with DNS resolving inside the docker container.
 This causes trouble because OpenVPN will not be able to resolve the host to connect to.
@@ -86,3 +94,8 @@ If the VPN connection fails or the container for any other reason loses connecti
 
 When your are using a managed network layer for example, the default link mtu of 1500 can be to big. Setting a lower mtu in OpenVPN should help:
 `-e OPENVPN_OPTS=--tun-mtu 1300`
+
+
+#### "ERROR: Cannot open TUN/TAP dev /dev/net/tun: No such file or directory (errno=2)"
+
+Run the container in privileged mode: `--privileged` or `privileged: true` for compose.

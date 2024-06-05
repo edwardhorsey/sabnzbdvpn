@@ -1,7 +1,7 @@
-FROM ubuntu:focal
+FROM arm64v8/ubuntu:focal
 
 ARG DUMB_INIT_VERSION="1.2.5"
-ARG DUMB_INIT_ARCH="amd64"
+ARG DUMB_INIT_ARCH="arm64"
 
 ENV LANG="en_US.UTF-8" \
     LANGUAGE="en_US.UTF-8" \
