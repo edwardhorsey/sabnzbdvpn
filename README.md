@@ -17,6 +17,23 @@ docker run -d --name sabnzbdvpn \
             cheersmate/sabnzbdvpn
 ```
 
+Docker compose:
+```
+name: <your project name>
+services:
+    sabnzbdvpn:
+        container_name: sabnzbdvpn
+        volumes:
+            - /host/storage/path:/config
+            - /path/to/openvpnconfigdir:/etc/openvpn/custom
+            - /etc/localtime:/etc/localtime:ro
+        environment:
+            - LOCAL_NETWORK=192.168.0.0/24
+        ports:
+            - 8080:8080
+        image: cheersmate/sabnzbdvpn
+```
+
 
 
 ### Environment options passed with docker -e
@@ -75,11 +92,13 @@ Add a new volume mount to your `docker run` command that mounts your config file
 
 If you have an separate ca.crt file your volume mount should be a folder containing both the ca.crt and the .ovpn config.
 
-If you are being asked to enter your username and password when OpenVPN is initialising (`auth-user-pass` option), add the following line to your .ovpn config file:
+#### Username and password
+
+If you are asked to enter your username and password when OpenVPN is initialising (due to `auth-user-pass` option being included in your config without an argument), add the following line to your .ovpn config file:
 ```
 auth-user-pass /etc/openvpn/custom/pass.txt
 ```
-Then create a bind mount to the file on your local machine. Eg. `-v /path/to/pass.txt:/etc/openvpn/custom/pass.txt`.
+Then create a bind mount to the file (containing your username and password separated by a line break) on your local machine. Eg. `-v /path/to/pass.txt:/etc/openvpn/custom/pass.txt`.
 
 #### Use Google DNS servers
 Some have encountered problems with DNS resolving inside the docker container.
