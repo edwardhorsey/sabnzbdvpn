@@ -4,6 +4,8 @@ Docker container which runs SABnzbd while connected to OpenVPN.
 
 This is an arm64 build of [sabnzbdvpn container](https://github.com/Mumie-hub/docker-services) by Mumie-hub.
 
+View on [Docker Hub](https://hub.docker.com/r/cheersmate/sabnzbdvpn).
+
 ## Run container from Docker registry
 To run the container use this command for example:
 
@@ -77,6 +79,8 @@ Nginx with proxypass config.
 ```
 $ docker run -d \
       --link <sabnzbdvpn-containername> \
+      --net <sabnzbdvpn-dockernetwork> \
+      -v /path/to/customnginx.conf:/etc/nginx/nginx.conf:ro \
       -p 8080:8080 \
       nginx:latest
 ```
